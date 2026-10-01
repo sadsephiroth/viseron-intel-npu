@@ -16,4 +16,4 @@ RUN sed -i 's/fallback_device = "CPU" if core.available_devices == \["CPU"\] els
 # Configure /tmp/Ultralytics permissions and disable telemetry checks
 RUN mkdir -p /tmp/Ultralytics && \
     printf '{\n  "sync": false,\n  "check": false\n}\n' > /tmp/Ultralytics/settings.json && \
-    chown -R abc:abc /tmp/Ultralytics
+    chmod -R 777 /tmp/Ultralytics
