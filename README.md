@@ -1,4 +1,3 @@
-Markdown
 # Viseron with Intel NPU (AI Boost / OpenVINO) Hardware Acceleration
 
 Enable native Intel AI Boost NPU (`intel_vpu`) acceleration in [Viseron](https://github.com/roflcoopter/viseron) using OpenVINO and Ultralytics YOLOv8.
@@ -9,7 +8,7 @@ Validated on an **Intel Core Ultra 7 270K Plus** running **Arch Linux (Linux Ker
 
 ## Performance Benchmark
 
-- **Model:** YOLOv8-X (`yolov8x_openvino_model`, FP16 IR)
+- **Model:** YOLOv8-X(`  yolov8x_openvino_model`, FP16 IR)
 - **Active Cameras:** 5 concurrent streams
 - **Inference Latency:** **~160 ms** per frame
 - **Host CPU Impact:** Virtually 0% (inferences dispatched entirely to the NPU on IRQ 157)
@@ -29,27 +28,42 @@ Validated on an **Intel Core Ultra 7 270K Plus** running **Arch Linux (Linux Ker
 
 1. Linux Kernel 6.x+ or 7.x with `intel_vpu` driver active.
 2. Verify host driver presence:
-   ```bash
-   ls -la /dev/accel/accel0 /dev/dri
-Verify hardware interrupts:
-
-Bash
+``@bash
+ls -la /dev/accel/accel0 /dev/dri
+```
+3. Verify hardware interrupts:
+```bash
 grep intel_vpu /proc/interrupts
-Model Preparation
+```
+
+---
+
+## Model Preparation
+
 Convert your desired YOLO model to FP16 OpenVINO format:
 
-Bash
+``@bash
 python3 -c "
 from ultralytics import YOLO
-model = YOLO('yolov8x.pt')
+model = VOLO('yolov8x.pt')
 model.export(format='openvino', half=True)
 "
 mv yolov8x_openvino_model /path/to/viseron/config/models/yolo/
-Build & Run
-Bash
+```
+
+---
+
+## Build & Run
+
+```bash
 docker compose up -d --build
-Configuration Example (config.yaml)
-YAML
+```
+
+---
+
+## Configuration Example (`config.yaml`)
+
+```yaml
 yolo:
   object_detector:
     model_path: /config/models/yolo/yolov8x_openvino_model
@@ -66,3 +80,4 @@ yolo:
             confidence: 0.85
             trigger_event_recording: true
             require_motion: true
+```
