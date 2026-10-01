@@ -1,0 +1,20 @@
+services:
+  viseron:
+    build: .
+    container_name: viseron
+    restart: unless-stopped
+    devices:
+      - /dev/accel:/dev/accel
+      - /dev/dri:/dev/dri
+    group_add:
+      - video
+      - render
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./config:/config
+      - ./recordings:/recordings
+    ports:
+      - 8888:8888
+      - 8554:8554
+      - 8555:8555/tcp
+      - 8555:8555/udp
